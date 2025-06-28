@@ -1,0 +1,59 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  height: 100%;
+}
+
+.nfl-blue {
+  background-color: #013369;
+}
+
+.bg-nfl-blue {
+  background-color: #013369;
+}
+
+.text-nfl-blue {
+  color: #013369;
+}
+
+.border-nfl-blue {
+  border-color: #013369;
+}
+
+.ring-nfl-blue {
+  --tw-ring-color: #013369;
+}
+
+.focus\:ring-nfl-blue:focus {
+  --tw-ring-opacity: 1;
+  --tw-ring-color: rgb(1 51 105 / var(--tw-ring-opacity));
+}
+
+.focus\:border-nfl-blue:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(1 51 105 / var(--tw-border-opacity));
+}
+
+/* Updated CSS for v2.0.1 */
+.nfl-item {
+  padding: 0px 15px;
+}
+
+.nfl-view-content {
+  background: transparent;
+}
