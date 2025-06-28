@@ -5,14 +5,35 @@ import toast from 'react-hot-toast';
 import { usePlayer } from '../context/PlayerContext';
 import SafeIcon from '../common/SafeIcon';
 
-const { FiCode, FiCopy, FiExternalLink } = FiIcons;
+const { FiCode, FiCopy, FiExternalLink, FiSettings } = FiIcons;
 
 const EmbedRanking = () => {
   const { consensusRanking } = usePlayer();
+  const [embedOptions, setEmbedOptions] = useState({
+    showTeam: true,
+    showOpponent: true,
+    maxPlayers: 10,
+    theme: 'light',
+    showHeader: true
+  });
 
   const generateEmbedCode = () => {
     const baseUrl = window.location.origin + window.location.pathname;
-    return `<iframe src="${baseUrl}#/widget" width="100%" height="600" frameborder="0" style="border-radius: 8px;box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);border: none;"> </iframe>`;
+    const params = new URLSearchParams({
+      showTeam: embedOptions.showTeam,
+      showOpponent: embedOptions.showOpponent,
+      maxPlayers: embedOptions.maxPlayers,
+      theme: embedOptions.theme,
+      showHeader: embedOptions.showHeader
+    });
+
+    return `<iframe 
+  src="${baseUrl}#/widget?${params.toString()}" 
+  width="100%" 
+  height="600" 
+  frameborder="0" 
+  style="border-radius: 8px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: none;">
+</iframe>`;
   };
 
   const copyToClipboard = () => {
@@ -24,7 +45,14 @@ const EmbedRanking = () => {
   };
 
   const openPreview = () => {
-    window.open('#/widget', '_blank');
+    const params = new URLSearchParams({
+      showTeam: embedOptions.showTeam,
+      showOpponent: embedOptions.showOpponent,
+      maxPlayers: embedOptions.maxPlayers,
+      theme: embedOptions.theme,
+      showHeader: embedOptions.showHeader
+    });
+    window.open(`#/widget?${params.toString()}`, '_blank');
   };
 
   if (consensusRanking.length === 0) {
@@ -51,12 +79,110 @@ const EmbedRanking = () => {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-        {/* Actions */}
+        {/* Configuration */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="space-y-6"
         >
+          <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
+            <h2 className="text-xl font-semibold text-gray-900 mb-4 flex items-center">
+              <SafeIcon icon={FiSettings} className="mr-2" />
+              Embed Options
+            </h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Maximum Players
+                </label>
+                <select
+                  value={embedOptions.maxPlayers}
+                  onChange={(e) => setEmbedOptions(prev => ({
+                    ...prev,
+                    maxPlayers: parseInt(e.target.value)
+                  }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-nfl-blue focus:border-nfl-blue"
+                >
+                  <option value={5}>Top 5</option>
+                  <option value={10}>Top 10</option>
+                  <option value={15}>Top 15</option>
+                  <option value={20}>Top 20</option>
+                  <option value={50}>All Players</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Theme
+                </label>
+                <select
+                  value={embedOptions.theme}
+                  onChange={(e) => setEmbedOptions(prev => ({
+                    ...prev,
+                    theme: e.target.value
+                  }))}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-nfl-blue focus:border-nfl-blue"
+                >
+                  <option value="light">Light</option>
+                  <option value="dark">Dark</option>
+                  <option value="nfl">NFL Theme</option>
+                </select>
+              </div>
+
+              <div className="space-y-3">
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="showHeader"
+                    checked={embedOptions.showHeader}
+                    onChange={(e) => setEmbedOptions(prev => ({
+                      ...prev,
+                      showHeader: e.target.checked
+                    }))}
+                    className="h-4 w-4 text-nfl-blue focus:ring-nfl-blue border-gray-300 rounded"
+                  />
+                  <label htmlFor="showHeader" className="ml-2 text-sm text-gray-700">
+                    Show Header
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="showTeam"
+                    checked={embedOptions.showTeam}
+                    onChange={(e) => setEmbedOptions(prev => ({
+                      ...prev,
+                      showTeam: e.target.checked
+                    }))}
+                    className="h-4 w-4 text-nfl-blue focus:ring-nfl-blue border-gray-300 rounded"
+                  />
+                  <label htmlFor="showTeam" className="ml-2 text-sm text-gray-700">
+                    Show Team Names
+                  </label>
+                </div>
+
+                <div className="flex items-center">
+                  <input
+                    type="checkbox"
+                    id="showOpponent"
+                    checked={embedOptions.showOpponent}
+                    onChange={(e) => setEmbedOptions(prev => ({
+                      ...prev,
+                      showOpponent: e.target.checked
+                    }))}
+                    className="h-4 w-4 text-nfl-blue focus:ring-nfl-blue border-gray-300 rounded"
+                  />
+                  <label htmlFor="showOpponent" className="ml-2 text-sm text-gray-700">
+                    Show Opponents
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
           <div className="bg-white rounded-lg shadow-sm p-6 border border-gray-200">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Actions</h3>
             <div className="space-y-3">
@@ -69,6 +195,7 @@ const EmbedRanking = () => {
                 <SafeIcon icon={FiExternalLink} className="mr-2" />
                 Preview Embed
               </motion.button>
+
               <motion.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -93,11 +220,13 @@ const EmbedRanking = () => {
               <SafeIcon icon={FiCode} className="mr-2" />
               Embed Code
             </h2>
+            
             <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
               <pre className="text-green-400 text-sm whitespace-pre-wrap">
                 {generateEmbedCode()}
               </pre>
             </div>
+
             <div className="mt-4 text-sm text-gray-600">
               <p className="mb-2">
                 <strong>Usage Instructions:</strong>
@@ -120,16 +249,22 @@ const EmbedRanking = () => {
                 This is how it will look on your website
               </div>
               <div className="p-4">
-                <div className="bg-white text-gray-900 shadow-lg rounded-lg overflow-hidden">
-                  <div className="px-4 py-3 border-b border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <h4 className="font-semibold">NFL Player Rankings</h4>
-                      <span className="text-xs text-gray-500">Live</span>
+                <div className={`rounded-lg overflow-hidden ${
+                  embedOptions.theme === 'dark' ? 'bg-gray-900 text-white' :
+                  embedOptions.theme === 'nfl' ? 'bg-gradient-to-br from-nfl-blue to-blue-800 text-white' :
+                  'bg-white text-gray-900'
+                } shadow-lg`}>
+                  {embedOptions.showHeader && (
+                    <div className="px-4 py-3 border-b border-opacity-20">
+                      <div className="flex items-center justify-between">
+                        <h4 className="font-semibold">NFL Player Rankings</h4>
+                        <span className="text-xs opacity-75">Live</span>
+                      </div>
                     </div>
-                  </div>
+                  )}
                   <div className="max-h-48 overflow-y-auto">
-                    {consensusRanking.slice(0, 5).map((player, index) => (
-                      <div key={player.id} className="px-4 py-3 border-b border-gray-100 last:border-b-0">
+                    {consensusRanking.slice(0, embedOptions.maxPlayers).map((player, index) => (
+                      <div key={player.id} className="px-4 py-3 border-b border-opacity-10 last:border-b-0">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center space-x-3">
                             <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center text-xs font-bold">
@@ -137,9 +272,13 @@ const EmbedRanking = () => {
                             </div>
                             <div>
                               <div className="text-sm font-medium">{player.name}</div>
-                              <div className="text-xs text-gray-500">
-                                {player.team} vs {player.opponent}
-                              </div>
+                              {(embedOptions.showTeam || embedOptions.showOpponent) && (
+                                <div className="text-xs opacity-75">
+                                  {embedOptions.showTeam && embedOptions.showOpponent && `${player.team} vs ${player.opponent}`}
+                                  {embedOptions.showTeam && !embedOptions.showOpponent && player.team}
+                                  {!embedOptions.showTeam && embedOptions.showOpponent && `vs ${player.opponent}`}
+                                </div>
+                              )}
                             </div>
                           </div>
                           <div className="text-xs font-semibold">

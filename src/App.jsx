@@ -19,19 +19,16 @@ function App() {
             <Route path="/widget" element={<EmbedWidget />} />
             
             {/* Regular app routes with layout */}
-            <Route 
-              path="/*" 
-              element={
-                <Layout>
-                  <Routes>
-                    <Route path="/" element={<AdminDashboard />} />
-                    <Route path="/rank" element={<UserRanking />} />
-                    <Route path="/consensus" element={<ConsensusRanking />} />
-                    <Route path="/embed" element={<EmbedRanking />} />
-                  </Routes>
-                </Layout>
-              } 
-            />
+            <Route path="/*" element={
+              <Layout>
+                <Routes>
+                  <Route path="/" element={<AdminDashboard />} />
+                  <Route path="/rank" element={<UserRanking />} />
+                  <Route path="/consensus" element={<ConsensusRanking />} />
+                  <Route path="/embed" element={<EmbedRanking />} />
+                </Routes>
+              </Layout>
+            } />
           </Routes>
           <Toaster position="top-right" />
         </div>

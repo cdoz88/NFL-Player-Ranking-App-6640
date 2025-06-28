@@ -1,25 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import {
-  DndContext,
-  closestCenter,
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
-import {
-  arrayMove,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable';
-import {
-  useSortable,
-} from '@dnd-kit/sortable';
-import {
-  CSS,
-} from '@dnd-kit/utilities';
+import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
+import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import * as FiIcons from 'react-icons/fi';
 import toast from 'react-hot-toast';
 import { usePlayer } from '../context/PlayerContext';
@@ -34,7 +18,7 @@ const SortablePlayer = ({ player, rank }) => {
     setNodeRef,
     transform,
     transition,
-    isDragging,
+    isDragging
   } = useSortable({ id: player.id });
 
   const style = {
@@ -48,7 +32,7 @@ const SortablePlayer = ({ player, rank }) => {
       style={style}
       {...attributes}
       {...listeners}
-      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-3 cursor-move hover:shadow-md transition-shadow ${
+      className={`bg-white rounded-lg shadow-sm border border-gray-200 p-4 cursor-move hover:shadow-md transition-shadow ${
         isDragging ? 'opacity-50' : ''
       }`}
       whileHover={{ scale: 1.01 }}
@@ -98,7 +82,6 @@ const UserRanking = () => {
       setRankedPlayers((items) => {
         const oldIndex = items.findIndex(item => item.id === active.id);
         const newIndex = items.findIndex(item => item.id === over.id);
-
         return arrayMove(items, oldIndex, newIndex);
       });
     }
@@ -116,6 +99,7 @@ const UserRanking = () => {
     }
 
     setIsSubmitting(true);
+    
     try {
       const ranking = rankedPlayers.map(player => player.id);
       submitRanking(ranking, userId.trim());
@@ -218,7 +202,7 @@ const UserRanking = () => {
             items={rankedPlayers}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-2">
+            <div className="space-y-3">
               {rankedPlayers.map((player, index) => (
                 <SortablePlayer
                   key={player.id}

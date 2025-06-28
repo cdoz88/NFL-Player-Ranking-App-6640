@@ -56,7 +56,7 @@ export const PlayerProvider = ({ children }) => {
       ranking: userRanking,
       timestamp: new Date().toISOString()
     };
-
+    
     setRankings(prev => [...prev, ranking]);
     calculateConsensus([...rankings, ranking]);
   };
@@ -65,7 +65,7 @@ export const PlayerProvider = ({ children }) => {
     if (allRankings.length === 0) return;
 
     const playerScores = {};
-
+    
     // Initialize scores
     players.forEach(player => {
       playerScores[player.id] = {

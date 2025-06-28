@@ -27,16 +27,21 @@ const AdminDashboard = () => {
       header: true,
       skipEmptyLines: true,
       transformHeader: (header) => {
+        // Normalize headers: lowercase and trim whitespace
         return header.toLowerCase().trim();
       },
       complete: (results) => {
         try {
+          console.log('Parsed CSV data:', results.data);
+          console.log('Headers found:', results.meta.fields);
+
           if (!results.data || results.data.length === 0) {
             toast.error('CSV file appears to be empty');
             setUploading(false);
             return;
           }
 
+          // Check if we have the required headers (case insensitive)
           const headers = results.meta.fields || [];
           const hasName = headers.some(h => h.includes('name'));
           const hasTeam = headers.some(h => h.includes('team'));
@@ -50,10 +55,12 @@ const AdminDashboard = () => {
 
           const parsedPlayers = results.data
             .filter(row => {
+              // Filter out completely empty rows
               const values = Object.values(row);
               return values.some(value => value && value.toString().trim());
             })
             .map((row, index) => {
+              // Find the correct column names (case insensitive)
               const nameCol = Object.keys(row).find(key => key.includes('name'));
               const teamCol = Object.keys(row).find(key => key.includes('team'));
               const opponentCol = Object.keys(row).find(key => key.includes('opponent'));
@@ -66,8 +73,11 @@ const AdminDashboard = () => {
               };
             })
             .filter(player => {
+              // Only keep players with all required fields
               return player.name && player.team && player.opponent;
             });
+
+          console.log('Processed players:', parsedPlayers);
 
           if (parsedPlayers.length === 0) {
             toast.error('No valid player data found. Please ensure all rows have name, team, and opponent values.');
@@ -91,6 +101,7 @@ const AdminDashboard = () => {
       }
     });
 
+    // Reset input
     event.target.value = '';
   };
 
@@ -105,7 +116,7 @@ const AdminDashboard = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="mb-8">
         <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Dashboard</h1>
-        <p className="text-gray-600">Upload CSV files of NFL players and manage rankings (v4.2.0)</p>
+        <p className="text-gray-600">Upload CSV files of NFL players and manage rankings</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">

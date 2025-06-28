@@ -7,10 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        'nfl': {
-          'blue': '#013369',
-          'red': '#D50A0A',
-          'silver': '#869397'
+        nfl: {
+          blue: '#013369',
+          red: '#D50A0A',
+          silver: '#869397'
         }
       },
       fontFamily: {

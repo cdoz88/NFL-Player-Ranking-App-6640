@@ -121,6 +121,7 @@ const ConsensusRanking = () => {
             Consensus Rankings
           </h2>
         </div>
+
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
             <thead className="bg-gray-50">
@@ -139,6 +140,9 @@ const ConsensusRanking = () => {
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Avg Score
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Rankings
                 </th>
               </tr>
             </thead>
@@ -174,6 +178,11 @@ const ConsensusRanking = () => {
                         {player.averageScore.toFixed(1)}
                       </div>
                     </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500">
+                        {player.rankCount} / {rankings.length}
+                      </div>
+                    </td>
                   </motion.tr>
                 );
               })}
@@ -194,7 +203,7 @@ const ConsensusRanking = () => {
           <p>• Each user ranking assigns points to players based on their position (higher position = more points)</p>
           <p>• Consensus ranking is calculated by averaging all user scores for each player</p>
           <p>• Players are then sorted by their average score in descending order</p>
-          <p>• Only players that appear in user rankings are included in the consensus</p>
+          <p>• "Rankings" column shows how many users included this player in their rankings</p>
         </div>
       </motion.div>
     </div>
